@@ -41,7 +41,7 @@ public class MemberMain_harim
 	public static void main(String[] args) throws ClassNotFoundException, SQLException
 	{
 		MemberDTO dto = new MemberDTO();
-		MemberDAO dao = new MemberDAO();
+		MemberDAO_harim dao = new MemberDAO_harim();
 		
 		int inputCnt = dao.add(dto);
 		
@@ -78,6 +78,16 @@ public class MemberMain_harim
   2      박민지   010-1111-1111
   3      이희주   010-2222-2222
   4      심혜진   010-3333-3333
+----------------------------------
+
+----------------------------------
+전체 회원 수 : 4명
+----------------------------------
+ 번호     이름    전화번호
+  1      이상화   010-1111-1111
+  2      이새롬   010-8833-0594
+  3      선혜연   010-2414-5742
+  4      이하림   010-4033-1022
 ----------------------------------
 */
 
