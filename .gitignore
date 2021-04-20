@@ -8,7 +8,8 @@
 target/
 .idea
 classes/
-META_INF/
+/META-INF/
+MANIFEST.MF
 .settings/
 .metadata
 .classpath
