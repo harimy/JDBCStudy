@@ -61,6 +61,7 @@ public class Process
 			
 			// 데이터베이스 연결 종료
 			dao.close();
+			sc.close();
 			
 		} catch (Exception e)
 		{
@@ -129,15 +130,30 @@ public class Process
 	// 이름 검색 출력
 	public void sungjukSearchName()
 	{
+		Scanner sc = new Scanner(System.in);
+		
 		try
 		{
+			dao.connection();
+			System.out.print("검색하실 이름을 입력하세요 : ");
+			String name = sc.next();
+			
+			for (ScoreDTO dto : dao.lists(name))
+			{
+				System.out.printf("%3s %4s %4d %4d %4d %5d %5.1f %5d\n"
+								, dto.getSid(), dto.getName(), dto.getKor(), dto.getEng(), dto.getMat()
+								, dto.getTot(), dto.getAvg(), dto.getRank());
+			}
+			
+			dao.close();
+			sc.close();
 			
 		} catch (Exception e)
 		{
-			// TODO: handle exception
+			System.out.println(e.toString());
 		}
 		
-	}
+	}//end sungjukSearchName
 	
 	// 성적 수정   
 	public void sungjukUpdate()
