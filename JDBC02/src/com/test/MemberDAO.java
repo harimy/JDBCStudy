@@ -20,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import com.util.DBConn;
 
@@ -109,6 +108,41 @@ public class MemberDAO
 	// 메소드 정의 → 전체 리스트 조회 기능 → select
 	public ArrayList<MemberDTO> lists() throws SQLException 
 	{
+		// 함께 풀이한 내용 
+		// 결과값으로 반환할 변수 선언 및 초기화
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		// 작업 객체 생성
+		Statement stmt = conn.createStatement();
+		
+		// 쿼리문 준비
+		String sql = "SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID";
+		
+		// 쿼리문 실행 
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		// ResultSet 처리 → 반복문 활용 → MemberDTO 인스턴스 생성 → 속성 구성 → ArrayList 에 적재
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setSid(rs.getString("SID"));
+			dto.setName(rs.getString("NAME"));
+			dto.setTel(rs.getString("TEL"));
+			
+			result.add(dto);
+		}
+		
+		// 리소스 반납
+		rs.close();
+		stmt.close();
+		
+		// 결과값 반환
+		return result;		
+	
+		
+		// 내가 풀이한 내용
+		/*
 		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
 		
 		MemberDTO dto = new MemberDTO();
@@ -132,38 +166,11 @@ public class MemberDAO
 		stmt.close();
 		
 		return result;
+		*/
+		
 	}
 	
 	
+	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -33,16 +33,19 @@ ORDER BY SID;
 SELECT SID, NAME, TEL FROM TBL_MEMBER ORDER BY SID
 ;
 
+--○ 커밋
+COMMIT;
+--==>> 커밋 완료.
 
-
-
-
-
-
-
-
-
-
-
+SELECT SID, NAME, TEL
+FROM TBL_MEMBER
+ORDER BY SID;
+--==>>
+/*
+1	이상화	010-1111-1111
+2	박민지	010-2222-2222
+3	이희주	010-3333-3333
+4	심혜진	010-4444-4444
+*/
 
 

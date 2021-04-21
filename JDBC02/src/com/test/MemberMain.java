@@ -34,50 +34,119 @@
 
 package com.test;
 
-import java.sql.SQLException;
+import java.util.Scanner;
+
+import com.util.DBConn;
 
 public class MemberMain
 {
-	public static void main(String[] args) throws ClassNotFoundException, SQLException
+	public static void main(String[] args)
 	{
-		MemberDTO dto = new MemberDTO();
-		MemberDAO dao = new MemberDAO();
+		Scanner sc = new Scanner(System.in);
 		
-		int inputCnt = dao.add(dto);
+		try
+		{
+			MemberDAO dao = new MemberDAO();
+			
+			int count = dao.count();
+			
+			// 테스트
+			//System.out.println(count);
+			//--==>> 1
+			
+			do
+			{
+				System.out.printf("이름 전화번호 입력(%d) : ", (++count));
+				String name = sc.next();
+				
+				// 반복의 조건을 무너뜨리는 코드 구성
+				if (name.equals("."))
+					break;
+				
+				String tel = sc.next();
+				
+				// MemberDTO 객체 구성
+				MemberDTO dto = new MemberDTO();
+				dto.setName(name);
+				dto.setTel(tel);
+				
+				// 데이터베이스에 데이터를 입력하는 메소드 호출
+				int result = dao.add(dto);
+				if (result > 0)
+					System.out.println(">> 회원 정보 입력 완료~!!!");
+				
+			} while (true);	
+			
+			/*
+			----------------------------------
+			전체 회원 수 : 3명
+			----------------------------------
+			번호    이름    전화번호
+			1      박민지   010-1111-1111
+			2      이희주   010-2222-2222
+			3      심혜진   010-3333-3333
+			----------------------------------
+			*/
+			
+			System.out.println();
+			System.out.println("----------------------------------");
+			System.out.printf("전체 회원 수 : %d명\n", dao.count());
+			System.out.println("----------------------------------");
+			System.out.println("번호    이름    전화번호");
+
+			for (MemberDTO obj : dao.lists())
+			{
+				System.out.printf("%3s %7s %12s\n", obj.getSid(), obj.getName(), obj.getTel());
+			}
+			
+			System.out.println("----------------------------------  ");	
+					
+		} catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+		finally
+		{
+			try
+			{
+				DBConn.close();
+				System.out.println("데이터베이스 연결 닫힘~!!!");
+				System.out.println("프로그램 종료됨~!!!");
+				
+			} catch (Exception e2)
+			{
+				System.out.println(e2.toString());
+			}
+		}
 		
-		int cnt = dao.count();
-		
-		System.out.println("----------------------------------");
-		System.out.println("전체 회원 수 : " + cnt + "명");
-		System.out.println("----------------------------------");
-		System.out.println(" 번호     이름    전화번호");
-		
-		for(MemberDTO d : dao.lists())
-			System.out.printf("%3s %8s %15s\n", d.getSid(), d.getName(), d.getTel());
-		
-		System.out.println("----------------------------------");
+		sc.close();
 		
 	}	
 	
 }
 
 
-// 실행 결과
-/*
-이름 전화번호 입력(1) : 박민지 010-1111-1111
-회원 정보 입력 완료~!!!
-이름 전화번호 입력(2) : 이희주 010-2222-2222
-회원 정보 입력 완료~!!!
-이름 전화번호 입력(3) : 심혜진 010-3333-3333
-회원 정보 입력 완료~!!!
-이름 전화번호 입력(4) : .
+
+/* [실행 결과]
+이름 전화번호 입력(5) : 조은선 010-5555-5555
+>> 회원 정보 입력 완료~!!!
+이름 전화번호 입력(6) : 소서현 010-6666-6666
+>> 회원 정보 입력 완료~!!!
+이름 전화번호 입력(7) : .
+
 ----------------------------------
-전체 회원 수 : 3명
+전체 회원 수 : 6명
 ----------------------------------
- 번호     이름    전화번호
-  2      박민지   010-1111-1111
-  3      이희주   010-2222-2222
-  4      심혜진   010-3333-3333
-----------------------------------
+번호    이름    전화번호
+  1     이상화 010-1111-1111
+  2     박민지 010-2222-2222
+  3     이희주 010-3333-3333
+  4     심혜진 010-4444-4444
+  5     조은선 010-5555-5555
+  6     소서현 010-6666-6666
+----------------------------------  
+데이터베이스 연결 닫힘~!!!
+프로그램 종료됨~!!!
 */
+
 

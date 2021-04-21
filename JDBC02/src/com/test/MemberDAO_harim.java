@@ -47,7 +47,11 @@ public class MemberDAO_harim
 		
 		for (int i = 1; ; i++)
 		{
-			System.out.printf("이름 전화번호 입력(%s) : ", i);
+			//System.out.printf("이름 전화번호 입력(%s) : ", i);
+			//-- 수정 → 들어있는 값 받아와서 사용자에게 몇번째 입력값인지 알려주기 위함)
+			int count = count();
+			System.out.printf("이름 전화번호 입력(%d) : ", (++count));
+			
 			dto.setName(sc.next());
 			
 			// 반복의 조건을 무너뜨리는 코드
