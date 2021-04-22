@@ -2,13 +2,8 @@ package com.test;
 
 public class MemberDTO
 {
-	int id;
-	String name;	
-	String ssn;	
-	String ibsadate;
-	String city, buseo, jikwi;
-	String tel;
-	int basicpay, sudang;
+	private int id, basicpay, sudang;
+	private String name, ssn, ibsadate, city, buseo, jikwi, tel;
 	
 	public int getId()
 	{
@@ -91,7 +86,5 @@ public class MemberDTO
 		this.sudang = sudang;
 	}
 	
-	
 
-	
 }

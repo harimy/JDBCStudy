@@ -57,7 +57,7 @@ public class MemberDAO
 			dto.setId(rs.getInt("EMP_ID"));
 			dto.setName(rs.getString("EMP_NAME"));
 			dto.setSsn(rs.getString("SSN"));
-			dto.setIbsadate("IBSADATE");
+			dto.setIbsadate(rs.getString("IBSADATE"));
 			dto.setCity(rs.getString("CITY_LOC"));
 			dto.setBuseo(rs.getString("BUSEO_NAME"));
 			dto.setTel(rs.getString("TEL"));
@@ -103,7 +103,7 @@ public class MemberDAO
 			dto.setId(rs.getInt("EMP_ID"));
 			dto.setName(rs.getString("EMP_NAME"));
 			dto.setSsn(rs.getString("SSN"));
-			dto.setIbsadate("IBSADATE");
+			dto.setIbsadate(rs.getString("IBSADATE"));
 			dto.setCity(rs.getString("CITY_LOC"));
 			dto.setBuseo(rs.getString("BUSEO_NAME"));
 			dto.setTel(rs.getString("TEL"));
@@ -119,9 +119,9 @@ public class MemberDAO
 		return result;
 	}
 	
-	/* 미완성
+	
 	// 직원 검색 출력 메소드 
-	public ArrayList<MemberDTO> search(int sel)
+	public ArrayList<MemberDTO> search(int sel, String val) throws SQLException
 	{
 		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
 		
@@ -130,18 +130,40 @@ public class MemberDAO
 		
 		switch (sel)
 		{
-		case 1: sql += String.format(" WHERE EMP_ID = ", args) 
+		case 1: sql += String.format(" WHERE EMP_ID = %d", Integer.parseInt(val));
 			break;
-
-		default:
+		case 2: sql += String.format(" WHERE EMP_NAME = '%s'", val);
+			break;
+		case 3: sql += String.format(" WHERE BUSEO_NAME = '%s'", val);
+			break;
+		case 4: sql += String.format(" WHERE JIKWI_NAME = '%s'", val);
 			break;
 		}
 		
-		
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setId(rs.getInt("EMP_ID"));
+			dto.setName(rs.getString("EMP_NAME"));
+			dto.setSsn(rs.getString("SSN"));
+			dto.setIbsadate(rs.getString("IBSADATE"));
+			dto.setCity(rs.getString("CITY_LOC"));
+			dto.setBuseo(rs.getString("BUSEO_NAME"));
+			dto.setTel(rs.getString("TEL"));
+			dto.setJikwi(rs.getString("JIKWI_NAME"));
+			dto.setBasicpay(rs.getInt("BASICPAY"));
+			dto.setSudang(rs.getInt("SUDANG"));
+			
+			result.add(dto);
+		}
+		stmt.close();
+		rs.close();
 		
 		return result;
 	}
-	*/
+	
 	
 	// 직원 수 출력
 	public int count() throws SQLException
