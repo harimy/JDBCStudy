@@ -22,7 +22,8 @@ public class DBConn
 			String user = "scott";
 			String pwd = "tiger";
 			
-			Class.forName("jdbc.oracle.driver.OracleDriver");
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
 			
 			dbConn = DriverManager.getConnection(url, user, pwd);
 		}
@@ -35,7 +36,7 @@ public class DBConn
 	{
 		if (dbConn == null)
 		{
-			Class.forName("jdbc.oracle.driver.OracleDriver");
+			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			dbConn = DriverManager.getConnection(url, user, pwd);
 		}

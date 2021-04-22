@@ -44,10 +44,10 @@ public class ScoreDAO
 		ArrayList<ScoreDTO> result = new ArrayList<ScoreDTO>();
 		
 		Statement stmt = conn.createStatement();
-		String sql = "SELECT SID, KOR, ENG, MAT"
-				+ ", KOR + ENG + MAT AS TOT"
+		String sql = "SELECT SID, NAME, KOR, ENG, MAT"
+				+ ", (KOR + ENG + MAT) AS TOT"
 				+ ", (KOR + ENG + MAT)/3 AS AVG"
-				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT)) AS RANK"
+				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT) DESC) AS RANK"
 				+ " FROM TBL_SCORE"
 				+ " ORDER BY SID ASC";
 		ResultSet rs = stmt.executeQuery(sql);
@@ -80,9 +80,9 @@ public class ScoreDAO
 		Statement stmt = conn.createStatement();
 		String sql = String.format("SELECT * FROM"
 				+ " (SELECT SID, NAME, KOR, ENG, MAT"
-				+ ", KOR + ENG + MAT AS TOT"
+				+ ", (KOR + ENG + MAT) AS TOT"
 				+ ", (KOR + ENG + MAT)/3 AS AVG"
-				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT)) AS RANK"
+				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT) DESC) AS RANK"
 				+ " FROM TBL_SCORE)"
 				+ " WHERE NAME = '%s'", name);
 		ResultSet rs = stmt.executeQuery(sql);
@@ -115,9 +115,9 @@ public class ScoreDAO
 		Statement stmt = conn.createStatement();
 		String sql = String.format("SELECT * FROM"
 				+ " (SELECT SID, NAME, KOR, ENG, MAT"
-				+ ", KOR + ENG + MAT AS TOT"
+				+ ", (KOR + ENG + MAT) AS TOT"
 				+ ", (KOR + ENG + MAT)/3 AS AVG"
-				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT)) AS RANK"
+				+ ", RANK() OVER (ORDER BY (KOR + ENG + MAT) DESC) AS RANK"
 				+ " FROM TBL_SCORE)"
 				+ " WHERE SID = %d", sid);
 		ResultSet rs = stmt.executeQuery(sql);
@@ -160,7 +160,7 @@ public class ScoreDAO
 
 	// 데이터 수정 담당 메소드
 	// 매개변수 → sid 넘겨받는게 아니라 DTO 타입 넘겨받음
-	public int name(ScoreDTO dto) throws SQLException 
+	public int modify(ScoreDTO dto) throws SQLException 
 	{
 		int result = 0;
 		
