@@ -424,7 +424,7 @@ public class Process
 				}
 			}
 			else
-				System.out.println(">> 수정 대상이 존재하지 않습니다.");
+				System.out.println(">> 삭제 대상이 존재하지 않습니다.");
 			
 			// 데이터베이스 연결 종료
 			dao.close();
