@@ -481,7 +481,8 @@ SELECT COUNT(*) AS COUNT FROM TBL_EMP
 ;
 --==>> 61
 
---※ 뷰 생성
+--※ 검색 직원 수 출력 과정에서
+--   뷰 생성
 CREATE OR REPLACE VIEW EMPVIEW
 AS
 SELECT E.EMP_ID, E.EMP_NAME, E.SSN, E.IBSADATE
@@ -501,17 +502,18 @@ FROM EMPVIEW;
 SELECT * FROM EMPVIEW
 ;
 
---> 정렬 한 줄 구성
-SELECT * FROM EMPVIEW ORDER BY EMP_NAME;
-;
-
---> 검색 한 줄 구성
-SELECT * FROM EMPVIEW WHERE EMP_ID = 1005
-;
-
-
 
 --7. 검색 직원 수 출력 쿼리문(사번/이름/부서/직위)
+SELECT COUNT(*) AS COUNT
+--FROM TBL_EMP
+FROM EMPVIEW
+--WHERE EMP_ID=1001;
+--WHERE EMP_NAME = '김가영';
+WHERE BUSEO_NAME = '개발부';
+--WHERE JIKWI_NAME = '대리';
+--> 한 줄 구성
+SELECT COUNT(*) AS COUNT EMPVIEW WHERE EMP_ID = 1001
+;
 
 
 --8. 직원 정보 수정 쿼리문 
@@ -540,7 +542,33 @@ DELETE FROM TBL_EMP WHERE EMP_ID = 1062
 --==>> 0개 행 이(가) 삭제되었습니다.
 
 
-
 DESC TBL_EMP;
 
+
+--10. 직원 데이터 전체 조회 쿼리문(사번/이름/부서/직위/급여내림차순 정렬)
+-- 사번, 이름, 주민번호, 입사일, 지역, 전화번호, 부서, 직위, 기본급, 수당, 급여
+SELECT EMP_ID, EMP_NAME, SSN, TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE -- CHECK! 세션에 따라 다르게 출력될 수 있으므로 TO_CHAR를 이용하여 문자형태로 얻어올 수 있게 설정해줘야함 
+     , CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME, BASICPAY, SUDANG, PAY
+FROM EMPVIEW
+ORDER BY -- EMP_ID;
+         -- EMP_NAME;
+         -- BUSEO_NAME;
+         -- JIKWI_NAME;
+         -- PAY DESC;
+--> 한 줄 구성
+SELECT EMP_ID, EMP_NAME, SSN, TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE, CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME, BASICPAY, SUDANG, PAY FROM EMPVIEW ORDER BY EMP_ID
+;
+
+
+--11. 검색 직원 리스트 출력 쿼리문(사번/이름/부서/직위)
+SELECT EMP_ID, EMP_NAME, SSN, TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE -- CHECK! 세션에 따라 다르게 출력될 수 있으므로 TO_CHAR를 이용하여 문자형태로 얻어올 수 있게 설정해줘야함 
+     , CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME, BASICPAY, SUDANG, PAY
+FROM EMPVIEW
+WHERE EMP_ID=1001;
+--WHERE EMP_NAME = '김가영';
+--WHERE BUSEO_NAME = '개발부';
+--WHERE JIKWI_NAME = '대리';
+--> 한 줄 구성
+SELECT EMP_ID, EMP_NAME, SSN, TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE, CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME, BASICPAY, SUDANG, PAY FROM EMPVIEW WHERE EMP_ID=1001
+;
 

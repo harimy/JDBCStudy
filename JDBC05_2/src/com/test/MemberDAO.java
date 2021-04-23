@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.util.DBConn;
 
@@ -81,7 +82,221 @@ public class MemberDAO
 		
 	}// end memberCount()
 	
+	// 검색 결과 직원 수 조회
+	// EMP_ID = 1001			→ key : EMP_ID 	/ value : 1001
+	// EMP_NAME = '이상화'		→ key : EMP_NAME 	/ value : '이상화'
+	// BUSEO_NAME = '개발부' 	→ key : BUSEO_NAME / value : '개발부'
+	// JIKWI_NAME = '대리' 		→ key : JIKWI_NAME / value : '대리'
+	
+	public int memberCount(String key, String value) throws SQLException
+	{
+		int result = 0;
+		
+		Statement stmt = conn.createStatement();
+		String sql = "";
+		if (key.equals("EMP_ID"))
+			sql = String.format("SELECT COUNT(*) AS COUNT FROM EMPVIEW WHERE %s = %s", key, value);
+		else
+			sql = String.format("SELECT COUNT(*) AS COUNT FROM EMPVIEW WHERE %s = '%s'", key, value);
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+			result = rs.getInt("COUNT");
+		rs.close();
+		stmt.close();
+		
+		return result;
+	}
 	
 	
+	// 직원 데이터 전체 조회 쿼리문(사번/이름/부서/직위/급여내림차순 정렬)
+	//-- 사번, 이름, 주민번호, 입사일, 지역, 전화번호, 부서, 직위, 기본급, 수당, 급여
+	public ArrayList<MemberDTO> lists(String key) throws SQLException
+	{
+		// 반환할 결과값 선언 및 초기화
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		// 작업 객체 생성
+		Statement stmt = conn.createStatement();
+		
+		// 쿼리문 준비
+		String sql = String.format("SELECT EMP_ID, EMP_NAME, SSN"
+				   				 + ", TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE"
+				   				 + ", CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME"
+				   				 + ", BASICPAY, SUDANG, PAY"
+				   				 + " FROM EMPVIEW"
+				   				 + " ORDER BY %s", key);
+		
+		// 쿼리문 실행
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		// ResultSet 처리 → 반복문 구성
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setEmpId(rs.getInt("EMP_ID"));
+			dto.setEmpName(rs.getString("EMP_NAME"));
+			dto.setSsn(rs.getString("SSN"));
+			dto.setIbsaDate(rs.getString("IBSADATE"));
+			dto.setCityLoc(rs.getString("CITY_LOC"));
+			dto.setTel(rs.getString("TEL"));
+			dto.setBuseoName(rs.getString("BUSEO_NAME"));
+			dto.setJikwiName(rs.getString("JIKWI_NAME"));
+			dto.setBasicPay(rs.getInt("BASICPAY"));
+			dto.setSudang(rs.getInt("SUDANG"));
+			dto.setPay(rs.getInt("PAY"));
+			
+			result.add(dto);
+		}
+		stmt.close();
+		rs.close();
+		
+		return result;
+	} // end lists()
+	
+	
+	public ArrayList<MemberDTO> searchLists(String key, String value) throws SQLException
+	{
+		ArrayList<MemberDTO> result = new ArrayList<MemberDTO>();
+		
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT EMP_ID, EMP_NAME, SSN"
+				   + ", TO_CHAR(IBSADATE, 'YYYY-MM-DD') AS IBSADATE"
+				   + ", CITY_LOC, TEL, BUSEO_NAME, JIKWI_NAME"
+				   + ", BASICPAY, SUDANG, PAY"
+				   + " FROM EMPVIEW";
+		if(key.equals("EMP_ID"))
+			sql += String.format(" WHERE %s = %d", key, Integer.parseInt(value));
+		else
+			sql += String.format(" WHERE %s = '%s'", key, value);
+		
+		ResultSet rs = stmt.executeQuery(sql);
+		
+		while (rs.next())
+		{
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setEmpId(rs.getInt("EMP_ID"));
+			dto.setEmpName(rs.getString("EMP_NAME"));
+			dto.setSsn(rs.getString("SSN"));
+			dto.setIbsaDate(rs.getString("IBSADATE"));
+			dto.setCityLoc(rs.getString("CITY_LOC"));
+			dto.setTel(rs.getString("TEL"));
+			dto.setBuseoName(rs.getString("BUSEO_NAME"));
+			dto.setJikwiName(rs.getString("JIKWI_NAME"));
+			dto.setBasicPay(rs.getInt("BASICPAY"));
+			dto.setSudang(rs.getInt("SUDANG"));
+			dto.setPay(rs.getInt("PAY"));
+			
+			result.add(dto);
+		}
+		stmt.close();
+		rs.close();
+		
+		return result;
+	}// end searchLists()
+	
+	// 지역 리스트 조회
+	public ArrayList<String> searchCity() throws SQLException
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT CITY_LOC FROM TBL_CITY";
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+			result.add(rs.getString("CITY_LOC"));
+		stmt.close();
+		rs.close();
+		
+		return result;
+	}
+	
+	// 부서 리스트 조회
+	public ArrayList<String> searchBuseo() throws SQLException
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT BUSEO_NAME FROM TBL_BUSEO";
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+			result.add(rs.getString("BUSEO_NAME"));
+		stmt.close();
+		rs.close();
+		
+		return result;
+	}
+	
+	
+	// 직위 리스트 조회
+	public ArrayList<String> searchJikwi() throws SQLException
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT JIKWI_NAME FROM TBL_JIKWI";
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+			result.add(rs.getString("JIKWI_NAME"));
+		stmt.close();
+		rs.close();
+		
+		return result;
+	}
+	
+	// 직위에 따른 최소 기본급 조회
+	public int searchBasicPay(String jikwiName) throws SQLException
+	{
+		int result = 0;
+		
+		Statement stmt = conn.createStatement();
+		String sql = String.format("SELECT MIN_BASICPAY FROM TBL_JIKWI WHERE JIKWI_NAME = '%s'", jikwiName);
+		ResultSet rs = stmt.executeQuery(sql);
+		while (rs.next())
+			result = rs.getInt("MIN_BASICPAY");
+		rs.close();
+		stmt.close();
+		
+		return result;
+	}
+	
+	// 직원 수정
+	public int modify(MemberDTO dto) throws SQLException
+	{
+		int result = 0;
+		Statement stmt = conn.createStatement();
+
+		String sql = String.format("UPDATE TBL_EMP SET EMP_NAME = '%s'"
+								 + ", SSN = '%s'"
+								 + ", IBSADATE = TO_DATE('%s', 'YYYY-MM-DD')"
+								 + ", CITY_ID = (SELECT CITY_ID FROM TBL_CITY WHERE CITY_LOC='%s')"
+								 + ", TEL = '%s'"
+								 + ", BUSEO_ID = (SELECT BUSEO_ID FROM TBL_BUSEO WHERE BUSEO_NAME = '%s')"
+								 + ", JIKWI_ID = (SELECT JIKWI_ID FROM TBL_JIKWI WHERE JIKWI_NAME = '%s')"
+								 + ", BASICPAY = %d"
+								 + ", SUDANG = %d"
+								 + " WHERE EMP_ID = %d"
+								 , dto.getEmpName(), dto.getSsn(), dto.getIbsaDate(), dto.getCityLoc()
+								 , dto.getTel(), dto.getBuseoName(), dto.getJikwiName()
+								 , dto.getBasicPay(), dto.getSudang(), dto.getEmpId());
+		result = stmt.executeUpdate(sql);
+		stmt.close();
+
+		return result;
+	}
+	
+	// 직원 삭제
+	public int remove(int empId) throws SQLException
+	{
+		int result = 0;
+		
+		Statement stmt = conn.createStatement();
+		String sql = String.format("DELETE FROM TBL_EMP WHERE EMP_ID = %d", empId);
+		result = stmt.executeUpdate(sql);
+		stmt.close();
+		
+		return result;
+	}
 	
 }
+
+
+
