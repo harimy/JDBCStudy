@@ -34,13 +34,13 @@ public class MemberProcess
 				cityStr.append(city + "/");
 			
 			// 부서 리스트 구성
-			ArrayList<String> buseos = dao.searchCity();
+			ArrayList<String> buseos = dao.searchBuseo();
 			StringBuilder buseoStr = new StringBuilder();
 			for (String buseo : buseos)
 				buseoStr.append(buseo + "/");
 			
 			// 직위 리스트 구성	
-			ArrayList<String> jikwis = dao.searchCity();
+			ArrayList<String> jikwis = dao.searchJikwi();
 			StringBuilder jikwiStr = new StringBuilder();
 			for (String jikwi : jikwis)
 				jikwiStr.append(jikwi + "/");
