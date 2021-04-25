@@ -214,5 +214,38 @@ public class MemberDAO
 		
 		return result;
 	}
+	
+	// 지역 리스트 불러오기
+	public ArrayList<String> searchCity()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		
+		return result;
+	}
+	
+	// 부서 리스트 불러오기
+	public ArrayList<String> searchBuseo()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		return result;
+	}	
+	// 직위 리스트 불러오기
+	public ArrayList<String> searchJikwi()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		
+		return result;
+	}
+	
+	// 최소 기본급 불러오기 
+	public int searchBasicPay()
+	{
+		int result = 0;
+		
+		return result;
+	}
+	
 
 }
